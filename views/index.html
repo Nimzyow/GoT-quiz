@@ -4,23 +4,24 @@
     <meta charset="UTF-8" />
     <title>Game of thrones quiz</title>
     <link rel="stylesheet" href="../styles//style.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body class="container">
-    <h1>Title</h1>
+    <h1 class="title" id="quizTitle">Title</h1>
     <img
+      id="quesImage"
       src="../assets/2_Chome_Asakusa.jpg"
       alt="placeholder image"
-      width="500"
-      height="500"
+      width="400"
+      height="250"
     />
     <div class="containerQueAns">
-      <h2>Question</h2>
-      <ul class="quesList" style="list-style-type: none;">
-        <li><input type="radio" checked="checked" name="radio" />Answer1</li>
-        <li><input type="radio" name="radio" />Answer2</li>
-        <li><input type="radio" name="radio" />Answer3</li>
-        <li><input type="radio" name="radio" />Answer4</li>
-      </ul>
+      <h2 class="question" id="question">Question</h2>
+
+      <ul class="quesLists" id="ansList"></ul>
     </div>
     <button id="confirm">Confirm selection</button>
 
