@@ -20,6 +20,7 @@ $(document).ready(function() {
   $("#question").text(data.questions[0].title); //sets question
   var ansData = data.questions[0].possible_answers; // store answers array
 
+  var ansSelected;
   var aList = $("ul.quesLists");
   //use the each method to iterate through the answer array variable, ansData
   $.each(ansData, function(index, value) {
@@ -30,7 +31,6 @@ $(document).ready(function() {
       .appendTo(aList);
     //we create the <input> element with 2 attributes and append it to <li></li> and then add the anwer after the <input> element.
     var input = $("<input/>")
-      .attr("id", "item")
       .attr("type", "radio")
       .attr("name", "radio")
       .appendTo(li)
@@ -39,7 +39,6 @@ $(document).ready(function() {
 
   //show confirm button on click
   $("input").on("click", function() {
-    console.log("clicked");
     $("#confirm").show();
   });
 });
