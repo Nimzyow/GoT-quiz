@@ -8,25 +8,40 @@
       href="https://fonts.googleapis.com/css?family=Roboto&display=swap"
       rel="stylesheet"
     />
+    <style>
+      body {
+        font-family: "Roboto";
+        font-size: 22px;
+      }
+    </style>
   </head>
   <body class="container">
-    <h1 class="title" id="quizTitle">Title</h1>
+    <div class="topNav">
+      <h1 class="title" id="quizTitle">Title</h1>
+    </div>
     <img
-      id="quesImage"
+      class="quesImage"
       src="../assets/2_Chome_Asakusa.jpg"
       alt="placeholder image"
       width="400"
       height="250"
+      border="1"
     />
     <div class="containerQueAns">
-      <h2 class="question" id="question">Question</h2>
-
+      <p class="question" id="question">Question</p>
+      <div class="pointsPercContiner" id="pointsPercContiner">
+        <p style="margin-right: 5px;">Your score =</p>
+        <h1 id="pointsPerc"></h1>
+      </div>
+      <p class="finalResult" id="finalResult"></p>
       <ul class="quesLists" id="ansList"></ul>
       <form class="quesForms" id="ansForm"></form>
+      <div class="resultMessage"></div>
     </div>
-    <div id="result"></div>
-    <button id="confirm">Confirm selection</button>
+    <div class="result"></div>
 
+    <button class="confirm">Confirm selection</button>
+    <button class="resetGame">Play again!</button>
     <script
       src="https://code.jquery.com/jquery-3.4.1.js"
       integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
