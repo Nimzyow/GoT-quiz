@@ -42,6 +42,11 @@ let hideConfirmButtonShowResult = function(result, message) {
     .removeClass() //remove any existing css
     .addClass(`result ${result}`); //add success css
   $(`<p id="userres" >${message}</p>`).appendTo(".result"); //display correct answer
+  setPoints(result);
+  setTimeout(setNextQuestion, timer); //call nextquestion() in 3 seconds
+};
+
+let setPoints = function(result) {
   switch (result) {
     case "success":
       points += data.questions[question].points; //add to total points
@@ -49,7 +54,7 @@ let hideConfirmButtonShowResult = function(result, message) {
     default:
       break;
   }
-  setTimeout(setNextQuestion, timer); //call nextquestion() in 3 seconds
+  console.log(points);
 };
 
 let setNextQuestion = function() {
