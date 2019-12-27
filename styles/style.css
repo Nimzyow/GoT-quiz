@@ -20,6 +20,7 @@
 
 .quesImage {
   margin-top: 4%;
+  box-shadow: 5px 5px 2px grey;
 }
 
 .question {
@@ -96,6 +97,14 @@
   background-color: #ff4848;
 }
 
+.scoreColor {
+  color: #007f7f;
+}
+
+.resultMessageText {
+  text-align: center;
+}
+
 .confirm {
   background-color: #3c40c6;
   border: none;
@@ -122,9 +131,16 @@
 
 .pointsPercContiner {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
+}
+
+.yourScore {
+  position: absolute;
+  top: 0;
+  font-size: medium;
 }
 
 .resetGame {
