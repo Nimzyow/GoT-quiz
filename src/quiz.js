@@ -6,36 +6,10 @@ let resultData = null;
 let points = 0;
 let pointsPerc = 0;
 let ansData = [];
-let timer = 200;
-let enSelect = false; //A flag to hide confirm answer button if user tries to select another answer during the duration of the timer.
+let timer = 3000;
+let elementSelect = false; //A flag to hide confirm answer button if user tries to select another answer during the duration of the timer.
 
-let answerConfirm = function() {
-  switch (data.questions[question].question_type) {
-    //ansSelected to be true or false if question type is a true or false question.
-    case "truefalse":
-      ansSelected = !Boolean(ansSelected);
-      break;
-    //below case will returns an array of numbers depending on the amount of answers selected.
-    case "mutiplechoice-multiple":
-      ansSelected = mulAnsSelected.map(function(str) {
-        return Number(str);
-      });
-    default:
-      break;
-  }
-
-  //the below if else statement checks for correct answer, displays result to user and pushes the result to results array
-  if (
-    JSON.stringify(ansSelected) ===
-    JSON.stringify(data.questions[question].correct_answer)
-  ) {
-    hideConfirmButtonShowResult("success", "Correct answer! Well done :)");
-  } else {
-    hideConfirmButtonShowResult("fail", "Incorrect answer :(");
-  }
-};
-
-let hideConfirmButtonShowResult = function(result, message) {
+const hideConfirmButtonShowResult = function(result, message) {
   $(".confirm").hide(); //hide the confirm button
   $(".result")
     .show() //show result
@@ -46,37 +20,30 @@ let hideConfirmButtonShowResult = function(result, message) {
   setTimeout(setNextQuestion, timer); //call nextquestion() in 3 seconds
 };
 
-let setPoints = function(result) {
-  switch (result) {
-    case "success":
-      points += data.questions[question].points; //add to total points
-      break;
-    default:
-      break;
-  }
-  console.log(points);
+const checkForCorrectAnswer = function() {
+  return (
+    JSON.stringify(ansSelected) ===
+    JSON.stringify(data.questions[question].correct_answer)
+  );
 };
 
-let setNextQuestion = function() {
-  enSelect = false; //enables user to select answer.
-  ansSelected = null; //current answer removed and set to null
-  mulAnsSelected = []; //current multiple choice answer set to empty array
-  question += 1; //set question integer so we call correct question
-  if (question < data.questions.length) {
-    $("#userres").remove(); //removes results text
-    $(".result").hide(); //hides previous result
-    $(".quesImage").attr("src", data.questions[question].img); //sets image
-    $("#question").text(question + 1 + ") " + data.questions[question].title); //sets question
-    setAnswers();
+const showAnswerResult = function() {
+  if (checkForCorrectAnswer(ansSelected)) {
+    hideConfirmButtonShowResult("success", "Correct answer! Well done :)");
   } else {
-    $(".result").remove(); //set results text to empty string
-    finalResults();
+    hideConfirmButtonShowResult("fail", "Incorrect answer :(");
   }
 };
 
-let setAnswers = function() {
+const setPoints = function(result) {
+  if (result === "success") {
+    points += data.questions[question].points; //add to total points
+  }
+};
+
+const setAnswers = function() {
   $(".quesForm").remove();
-  $(".quesList").remove(); //first remove the current answers.
+  $(".quesList").remove();
   let form = $("form.quesForms");
   switch (data.questions[question].question_type) {
     //show possible answers for true or false question
@@ -99,15 +66,15 @@ let setAnswers = function() {
   handleUserSelectedAnswers();
 };
 
-let handleUserSelectedAnswers = function() {
+const handleUserSelectedAnswers = function() {
   $("input").click(function() {
     switch (data.questions[question].question_type) {
-      case "mutiplechoice-multiple": //if its multiple choice answer
-        let answers = document.forms[0]; //find form label.
-        mulAnsSelected = []; // reset answers selected to empty array
+      case "mutiplechoice-multiple":
+        let answers = document.forms[0];
+        mulAnsSelected = [];
         for (let i = 0; i < answers.length; i++) {
           if (answers[i].checked) {
-            mulAnsSelected.push(answers[i].id); //push id of answer/s selected to mulAnsSelected array
+            mulAnsSelected.push(answers[i].id);
           }
         }
         $("input").click(function() {
@@ -118,22 +85,16 @@ let handleUserSelectedAnswers = function() {
         });
         break;
       default:
-        //if question is true/false answer or single choice answer
         ansSelected = jQuery(this).attr("id"); //when an answer is clicked, set ansSelected variable to the value of id of the selected element.
-        ansSelected = Number(ansSelected); //convert string to Number
+        ansSelected = Number(ansSelected);
         break;
     }
 
-    //below logic prevents users from selecting other answers when they have confirmed their answer through the enSelect boolean.
-    switch (enSelect) {
-      case true:
-        $(".confirm").hide();
-        break;
-      case false:
-        $(".confirm").show();
-        break;
-      default:
-        break;
+    //below logic prevents users from selecting other answers when they have confirmed their answer through the elementSelect boolean.
+    if (elementSelect) {
+      $(".confirm").hide();
+    } else {
+      $(".confirm").show();
     }
   });
 };
@@ -181,7 +142,7 @@ let finalResults = function() {
   }
 };
 
-let resultHandler = function(res) {
+const resultHandler = function(res) {
   $(".quesForm").remove();
   $(".quesList").remove();
   $(".question").remove();
@@ -193,4 +154,41 @@ let resultHandler = function(res) {
   $(".pointsPercContiner").show();
   $("#pointsPerc").text(pointsPerc + "%");
   $(".resetGame").show();
+};
+
+const setNextQuestion = function() {
+  elementSelect = false; //enables user to select answer.
+  ansSelected = null; //current answer removed and set to null
+  mulAnsSelected = []; //current multiple choice answer set to empty array
+  question += 1; //set question integer so we call correct question
+  if (question < data.questions.length) {
+    $("#userres").remove(); //removes results text
+    $(".result").hide(); //hides previous result
+    $(".quesImage").attr("src", data.questions[question].img); //sets image
+    $("#question").text(question + 1 + ") " + data.questions[question].title); //sets question
+    setAnswers();
+  } else {
+    $(".result").remove(); //set results text to empty string
+    finalResults();
+  }
+};
+
+const confirmAnswer = function() {
+  switch (data.questions[question].question_type) {
+    //ansSelected to be true or false if question type is a true or false question.
+    case "truefalse":
+      ansSelected = !Boolean(ansSelected);
+      showAnswerResult();
+      break;
+    //below case will returns an array of numbers depending on the amount of answers selected.
+    case "mutiplechoice-multiple":
+      ansSelected = mulAnsSelected.map(function(str) {
+        return Number(str);
+      });
+      showAnswerResult();
+      break;
+    default:
+      showAnswerResult();
+      break;
+  }
 };

@@ -28,10 +28,10 @@ $(document).ready(function() {
   });
 
   $(".confirm").on("click", function() {
-    enSelect = true;
-    answerConfirm();
+    elementSelect = true;
+    confirmAnswer();
     $("input").on("click", function(e) {
-      if (enSelect) {
+      if (elementSelect) {
         e.preventDefault();
       }
     });
