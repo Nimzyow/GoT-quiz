@@ -9,6 +9,48 @@ let ansData = [];
 let timer = 3000;
 let elementSelect = false; //A flag to hide confirm answer button if user tries to select another answer during the duration of the timer.
 
+const removeExistingClassAddSuccessClass = function(id) {
+  $(id)
+    .parent()
+    .removeClass()
+    .addClass("quesForm success");
+};
+
+const highlightCorrectAnswer = function() {
+  let answers = document.forms[0];
+  let correctAnswer = data.questions[question].correct_answer;
+  switch (data.questions[question].question_type) {
+    case "truefalse":
+      if (correctAnswer !== ansSelected) {
+        if (correctAnswer) {
+          removeExistingClassAddSuccessClass("#0");
+        } else {
+          removeExistingClassAddSuccessClass("#1");
+        }
+      }
+      break;
+    case "mutiplechoice-single":
+      for (let i = 0; i < answers.length; i++) {
+        if (correctAnswer !== ansSelected) {
+          let id = answers[i].id;
+          removeExistingClassAddSuccessClass(`#${correctAnswer}`);
+        }
+      }
+      break;
+    case "mutiplechoice-multiple":
+      for (let i = 0; i < answers.length; i++) {
+        if (JSON.stringify(ansSelected) !== JSON.stringify(correctAnswer)) {
+          correctAnswer.map(cAnswer => {
+            removeExistingClassAddSuccessClass(`#${cAnswer}`);
+          });
+        }
+      }
+      break;
+    default:
+      break;
+  }
+};
+
 const hideConfirmButtonShowResult = function(result, message) {
   $(".confirm").hide(); //hide the confirm button
   $(".result")
@@ -16,6 +58,7 @@ const hideConfirmButtonShowResult = function(result, message) {
     .removeClass() //remove any existing css
     .addClass(`result ${result}`); //add success css
   $(`<p id="userres" >${message}</p>`).appendTo(".result"); //display correct answer
+  highlightCorrectAnswer();
   setPoints(result);
   setTimeout(setNextQuestion, timer); //call nextquestion() in 3 seconds
 };
@@ -182,7 +225,7 @@ const confirmAnswer = function() {
       break;
     //below case will returns an array of numbers depending on the amount of answers selected.
     case "mutiplechoice-multiple":
-      ansSelected = mulAnsSelected.map(function(str) {
+      ansSelected = mulAnsSelected.map(str => {
         return Number(str);
       });
       showAnswerResult();

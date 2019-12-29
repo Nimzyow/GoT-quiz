@@ -76,6 +76,10 @@
   align-items: center;
 }
 
+.quesForm.success {
+  background-color: #43ac69;
+}
+
 .result {
   border: none;
   color: white;
