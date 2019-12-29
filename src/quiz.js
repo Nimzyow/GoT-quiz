@@ -32,7 +32,6 @@ const highlightCorrectAnswer = function() {
     case "mutiplechoice-single":
       for (let i = 0; i < answers.length; i++) {
         if (correctAnswer !== ansSelected) {
-          let id = answers[i].id;
           removeExistingClassAddSuccessClass(`#${correctAnswer}`);
         }
       }
